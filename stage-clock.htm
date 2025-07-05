@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Stage Clock - PEG</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background-color: black;
+      color: #2e4ad0; /* PEG Blue */
+      font-family: 'Segoe UI', sans-serif;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #formContainer {
+      color: white;
+      text-align: center;
+    }
+
+    input {
+      font-size: 1.5em;
+      padding: 0.5em;
+      margin: 0.5em;
+      width: 20em;
+    }
+
+    button {
+      font-size: 1.5em;
+      padding: 0.5em 1.5em;
+      margin-top: 1em;
+      background-color: #2e4ad0;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #2036a0;
+    }
+
+    #displayContainer {
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+
+    .location {
+      position: absolute;
+      top: 20%;
+      left: 12.5%;
+      font-size: 5vw;
+      color: white;
+      text-align: left;
+    }
+
+    .clock {
+      position: absolute;
+      top: 35%;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 15vw;
+      width: 75%;
+      text-align: center;
+    }
+
+    .event {
+      position: absolute;
+      top: 65%;
+      right: 12.5%;
+      font-size: 5vw;
+      color: white;
+      text-align: right;
+    }
+
+    .logo {
+      position: absolute;
+      bottom: 2%;
+      right: 2%;
+      height: 40px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="formContainer">
+  <h1>PEG Stage Clock Setup</h1>
+  <input type="text" id="eventInput" placeholder="Event Name (e.g. Sunday Worship)">
+  <br>
+  <input type="text" id="locationInput" placeholder="Location (e.g. Montgomery)">
+  <br>
+  <button onclick="startClock()">Start Clock</button>
+</div>
+
+<div id="displayContainer" style="display: none;">
+  <div class="location" id="locationDisplay"></div>
+  <div class="clock" id="clock">--:--:--</div>
+  <div class="event" id="eventDisplay"></div>
+  <!-- PEG Logo Placeholder -->
+  <img src="https://drive.google.com/uc?id=16gxEzIr1BoHV0Ft-t7m_YM0KyX2QGjTK" class="logo" alt="PEG Logo">
+</div>
+
+<script>
+  function startClock() {
+    const eventName = document.getElementById('eventInput').value || '';
+    const locationName = document.getElementById('locationInput').value || '';
+
+    document.getElementById('eventDisplay').textContent = eventName;
+    document.getElementById('locationDisplay').textContent = locationName;
+
+    document.getElementById('formContainer').style.display = 'none';
+    document.getElementById('displayContainer').style.display = 'block';
+
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    // Fullscreen mode
+    if (document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen();
+    }
+  }
+
+  function updateClock() {
+    const now = new Date();
+
+    let hours = now.getHours();
+    const minutes = now.getMinutes();
+    const seconds = now.getSeconds();
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+
+    hours = hours % 12;
+    hours = hours ? hours : 12; // 0 => 12
+
+    const padded = n => n.toString().padStart(2, '0');
+
+    const timeString = `${padded(hours)}:${padded(minutes)}:${padded(seconds)} ${ampm}`;
+    document.getElementById('clock').textContent = timeString;
+  }
+</script>
+
+</body>
+</html>
